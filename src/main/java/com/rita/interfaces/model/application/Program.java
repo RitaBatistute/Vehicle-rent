@@ -1,6 +1,6 @@
 package com.rita.interfaces.model.application;
 
-import com.rita.interfaces.model.entities.CarRental;
+import com.rita.interfaces.model.entities.VehicleRental;
 import com.rita.interfaces.model.entities.Vehicle;
 import com.rita.interfaces.model.model.services.BrazilTaxServices;
 import com.rita.interfaces.model.model.services.RentalService;
@@ -18,23 +18,25 @@ public class Program {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
         System.out.println("Rent data");
-        System.out.print("Car model: ");
-        String modelCar = sc.nextLine();
-        System.out.print("CheckIn (dd/MM/yyyy hh:mm): ");
-        LocalDateTime start = LocalDateTime.parse(sc.nextLine(), fmt);
-        System.out.print("CheckOut (dd/MM/yyyy hh:mm): ");
-        LocalDateTime finish = LocalDateTime.parse(sc.nextLine(), fmt);
+        System.out.print("Vehicle model: ");
+        String vehicleModel = sc.nextLine();
 
-        CarRental cr = new CarRental(start, finish, new Vehicle(modelCar));
+        System.out.print("CheckIn (dd/MM/yyyy hh:mm): ");
+        LocalDateTime startRental = LocalDateTime.parse(sc.nextLine(), fmt);
+
+        System.out.print("CheckOut (dd/MM/yyyy hh:mm): ");
+        LocalDateTime finishRental = LocalDateTime.parse(sc.nextLine(), fmt);
 
         System.out.print("Price per hour: $");
         double pricePerHour = sc.nextDouble();
+
         System.out.print("Price per day: $");
         double pricePerDay = sc.nextDouble();
 
-        RentalService rentalService = new RentalService(pricePerHour, pricePerDay, new BrazilTaxServices());
+        VehicleRental cr = new VehicleRental(startRental, finishRental, new Vehicle(vehicleModel));
 
-        rentalService.processInvoice(cr);
+        RentalService rentalService = new RentalService();
+        rentalService.processInvoice(cr, pricePerHour, pricePerDay, new BrazilTaxServices());
 
         System.out.println("Invoice");
         System.out.println("Basic payment: $" + String.format("%.2f", cr.getInvoice().getBasicPayment()));

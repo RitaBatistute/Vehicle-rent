@@ -1,6 +1,6 @@
 package com.rita.interfaces.model.model.services;
 
-import com.rita.interfaces.model.entities.CarRental;
+import com.rita.interfaces.model.entities.VehicleRental;
 import com.rita.interfaces.model.entities.Invoice;
 
 import java.time.Duration;
@@ -12,16 +12,9 @@ public class RentalService {
 
     private TaxService taxService;
 
-    public RentalService(Double pricePerHour, Double pricePerDay, TaxService taxService) {
-        super();
-        this.pricePerHour = pricePerHour;
-        this.pricePerDay = pricePerDay;
-        this.taxService = taxService;
-    }
+    public void processInvoice(VehicleRental vehicleRental, Double pricePerHour, Double pricePerDay, TaxService taxService){
 
-    public void processInvoice(CarRental carRental){
-
-        double minutes = Duration.between(carRental.getStart(), carRental.getFinish()).toMinutes();
+        double minutes = Duration.between(vehicleRental.getStart(), vehicleRental.getFinish()).toMinutes();
         double hours = minutes / 60.0;
 
         double basicPayment;
@@ -34,6 +27,6 @@ public class RentalService {
 
         double tax = taxService.tax(basicPayment);
 
-        carRental.setInvoice(new Invoice(basicPayment, tax));
+        vehicleRental.setInvoice(new Invoice(basicPayment, tax));
     }
 }
